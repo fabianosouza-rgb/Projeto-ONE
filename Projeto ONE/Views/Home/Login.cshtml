@@ -1,0 +1,51 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Projeto_ONE.Models.HomeModelLogin
+<!DOCTYPE html>
+
+
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+</head>
+<body>
+    @*@{
+            Layout = "~/Views/Shared/_Layout.cshtml";
+        }*@
+
+    <h3>Login de Usuarios</h3>
+    @Html.ActionLink("Criar conta de Usuario", "Cadastro");
+    <hr />
+    <!-- Formulário para login de usuarios -->
+    @using (Html.BeginForm("AutenticarUsuario", "Home", FormMethod.Post))
+    {
+        @Html.LabelFor(u => u.Login) <br />
+        @Html.TextBoxFor(u => u.Login)
+        @Html.ValidationMessageFor(u => u.Login)
+        <br /><br />
+
+        @Html.LabelFor(u => u.Senha) <br />
+        @Html.PasswordFor(u => u.Senha)
+        @Html.ValidationMessageFor(u => u.Senha)
+
+        <div></div>
+        <div></div>
+        <input type="submit" value="Acessar Sistema" />
+
+        <p>
+            @ViewBag.Mensagem
+        </p>
+
+        <br /><br />
+        <div>
+        </div>
+
+    }
+
+
+</body>
+</html>
