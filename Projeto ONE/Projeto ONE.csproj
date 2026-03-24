@@ -130,6 +130,7 @@
     <Compile Include="Controllers\AgendaController.cs" />
     <Compile Include="Controllers\CategoriaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Data\Dto\CategoriaDto.cs" />
     <Compile Include="Data\Dto\TarefaDto.cs" />
     <Compile Include="Data\Entidade\Categoria.cs" />
     <Compile Include="Data\Entidade\Tarefa.cs" />

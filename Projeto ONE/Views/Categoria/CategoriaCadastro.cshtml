@@ -1,11 +1,10 @@
-﻿
-
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 @model Projeto_ONE.Models.CategoriaModelCadastrar
 
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+
 
 <!DOCTYPE html>
 
@@ -14,8 +13,33 @@
     <meta name="viewport" content="width=device-width" />
     <title>Categoria</title>
 </head>
+
 <body>
-    <div>
-    </div>
+    @Html.ActionLink("Voltar", "Cadastro", "Agenda");
+
+    <hr />
+
+    @using (Html.BeginForm("CategoriaCadastrar", "Categoria", FormMethod.Post))
+    {
+        @*@Html.LabelFor(c => c.IdCategoria) <br />
+        @Html.TextBoxFor(c => c.IdCategoria)
+        @Html.ValidationMessageFor(c => c.IdCategoria)
+        <br /><br />*@
+
+        @Html.LabelFor(c => c.Nome) <br />
+        @Html.TextBoxFor(c => c.Nome)
+        @Html.ValidationMessageFor(c => c.Nome)
+        <br /> <br />
+
+
+        <input type="submit" value="Cadastrar Tarefa"
+               class="btn btn-success btn-block" />
+
+        <p>
+            @ViewBag.Mensagem
+        </p>
+    }
+
 </body>
 </html>
+

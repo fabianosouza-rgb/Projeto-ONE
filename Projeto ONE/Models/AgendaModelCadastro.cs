@@ -67,4 +67,10 @@ namespace Projeto_ONE.Models
         public List<TarefaDto> ListagemTarefas { get; set; } //saida..
 
     }
+
+    
+
+        
+    
+
 }

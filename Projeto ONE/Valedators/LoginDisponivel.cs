@@ -10,9 +10,7 @@ namespace Projeto_ONE.Valedators
 {
     public class LoginDisponivel : ValidationAttribute
     {
-        //implementar o método IsValid
-        //retornar true se a validação está ok...
-        //retornar false se ocorreu um erro de validação
+      
         public override bool IsValid(object value)
         {
             string Login = (string) value;

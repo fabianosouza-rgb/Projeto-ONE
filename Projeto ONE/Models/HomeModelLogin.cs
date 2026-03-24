@@ -15,7 +15,7 @@ namespace Projeto_ONE.Models
         public string Login { get; set; }
         
         [Required(ErrorMessage = "Por favor, informe a senha de acesso.")]
-        [Display(Name = "Informe suua Senha:")]
+        [Display(Name = "Informe sua Senha:")]
         public string Senha { get; set; }
     }
 
@@ -47,4 +47,4 @@ namespace Projeto_ONE.Models
         public string SenhaConfirm { get; set; }
 
     }
-}
+} 
