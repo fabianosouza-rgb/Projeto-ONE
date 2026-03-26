@@ -16,11 +16,11 @@ namespace Projeto_ONE.Controllers
     [Authorize] //requer autorização de acesso /agenda/
     public class AgendaController : Controller
     {
-       
+
         // GET: Agenda /index
         public ActionResult Index()
         {
-           
+
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace Projeto_ONE.Controllers
                     ModelState.Clear();
 
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     ViewBag.Mensagem = e.Message;
                 }
@@ -71,17 +71,17 @@ namespace Projeto_ONE.Controllers
         [HttpPost]
         public ActionResult Consulta(AgendaModelConsulta model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
                     TarefaData d = new TarefaData(); // persistencia...
 
-                    Usuario u = (Usuario) Session["usuariologado"];
+                    Usuario u = (Usuario)Session["usuariologado"];
                     model.ListagemTarefas = d.FindAll
                         (model.DataIni, model.DataFim, u.IdUsuario);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     ViewBag.Mensagem = e.Message;
                 }
@@ -106,6 +106,90 @@ namespace Projeto_ONE.Controllers
             return View("Consulta");
         }
 
+        [HttpGet]
+        public ActionResult Editar(int id)
+        {
+            try
+            {
+                TarefaData d = new TarefaData();
+                Tarefa t = d.Find(id);
+                return View(t);
+            }
+            catch (Exception e)
+            {
+                TempData["Mensagem"] = e.Message;
+                return RedirectToAction("Consulta");
+            }
+        }
 
+        [HttpPost]
+        public ActionResult ConfirmarAlteracao(Tarefa model)
+        {
+            try
+            {
+                TarefaData d = new TarefaData();
+
+                // Buscamos o objeto original do banco para não perder os outros dados (Usuario, Categoria, etc)
+                Tarefa t = d.Find(model.IdTarefa);
+               
+                if (t != null)
+                {
+                    t.Descricao = model.Descricao;
+                    d.Update(t);
+                    TempData["Mensagem"] = "Tarefa atualizada com sucesso!";
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["Mensagem"] = "Erro: " + e.Message;
+            }
+            return RedirectToAction("Consulta");
+        }
+
+
+
+        //CÓDIGO JAVA SCRIPT        
+       //[HttpPost] // Alterado para Post
+       // public ActionResult AlterarTarefa(int id, string descricao)
+       // {
+       //     try
+       //     {
+       //         TarefaData d = new TarefaData();
+       //         Tarefa t = d.Find(id); // Busca a tarefa existente
+
+       //         if (t != null)
+       //         {
+       //             t.Descricao = descricao; // Atualiza apenas a descrição vinda do JS
+       //             d.Update(t); // Chama o método de atualização do seu banco
+       //             return Json(new { success = true }); // Retorna sucesso para o JS
+       //         }
+       //         return Json(new { success = false, message = "Tarefa não encontrada" });
+       //     }
+       //     catch (Exception e)
+       //     {
+       //         return Json(new { success = false, message = e.Message });
+       //     }
+       // }
+
+        //CÓDIGO C# QUE ESTAVA RODANDO SEM CONSEGUIR SALVAR 
+        //[HttpGet]
+        //public ActionResult AlterarTarefa(int id)
+        //{
+        //    try
+        //    {
+        //        TarefaData d = new TarefaData();
+        //        Tarefa t = d.Find(id);
+        //        d.Update(t);
+        //        d.Insert(t);
+        //        ViewBag.Mensagem = "Tarefa alterada com sucesso";
+
+        //    }
+        //    catch (Exception e)
+        //    {
+
+        //        ViewBag.Mensagem = e.Message;
+        //    }
+        //    return View("Consulta");
+        //}
     }
 }

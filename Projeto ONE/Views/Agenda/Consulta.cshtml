@@ -1,92 +1,206 @@
 ﻿
 
 @model Projeto_ONE.Models.AgendaModelConsulta
-   
+
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <h3>Consulta de Tarefas</h3>
-    @Html.ActionLink("Voltar", "Cadastro")
-    <hr />
-    <div class="row">
-        <div class="cold-md-3">
-            @using (Html.BeginForm("Consulta", "Agenda", FormMethod.Post))
+<h3>Consulta de Tarefas</h3>
+@Html.ActionLink("Voltar", "Cadastro")
+<hr />
+
+@if (TempData["Mensagem"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <strong>Sucesso!</strong> @TempData["Mensagem"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>}
+
+<div class="row">
+    <div class="cold-md-3">
+        @using (Html.BeginForm("Consulta", "Agenda", FormMethod.Post))
+        {
+            <div style="color: red;">
+                @Html.ValidationSummary()
+            </div>
+
+            @Html.LabelFor(model => model.DataIni)
+            @Html.TextBoxFor(model => model.DataIni,
+           new { @class = "form-control", @type = "datetime-local" })
+            <br />
+
+            @Html.LabelFor(model => model.DataFim)
+            @Html.TextBoxFor(model => model.DataFim,
+            new { @class = "form-control", @type = "datetime-local" })
+            <br />
+
+            <input type="submit" value="Realizar Pesquisa"
+                   class=" btn btn-primary btn-block" />
+            <hr />
+
+            @ViewBag.Mensagem
+        }
+    </div>
+    <div class="col-md-9">
+
+        @if (Model != null && Model.ListagemTarefas != null)
+        {
+            if (Model.ListagemTarefas.Count > 0)
             {
-                <div style="color: red;">
-                    @Html.ValidationSummary()
-                </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tarefa</th>
+                            <th>Categoria</th>
+                            <th>Descrição</th>
+                            @*   <th>Criado em</th>*@
+                            <th>Inicio</th>
+                            <th>Termino</th>
+                            <th>Operações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                @Html.LabelFor(model => model.DataIni)
-                @Html.TextBoxFor(model => model.DataIni,
-               new { @class = "form-control", @type = "datetime-local" })
-                <br />
+                        @foreach (var t in Model.ListagemTarefas)
+                        {
+                            <tr>
+                                <td>@t.Titulo</td>
+                                <td>@t.Categoria</td>
 
-                @Html.LabelFor(model => model.DataFim)
-                @Html.TextBoxFor(model => model.DataFim,
-                new { @class = "form-control", @type = "datetime-local" })
-                <br />
+                                <th class="descricao">@t.Descricao</th>
+                                <th>@t.DataHoraInicio</th>
+                                <td>@t.DataHoraFim</td>
+                                <td>
+                                    @Html.ActionLink("Excluir", "ExcluirTarefa",
+                                   new { id = t.Codigo },
+                                   new { @class = "btn btn-danger btn-sm" })
+                                </td>
+                                <td>
+                                    @*<button class="btn btn-success btnAlterar">
+                                            Alterar
+                                        </button>
 
-                <input type="submit" value="Realizar Pesquisa"
-                       class=" btn btn-primary btn-block" />
-                <hr />
+                                        <span class="btn btn-default btnSalvarAlteracao" style="display: none">
+                                            @Html.ActionLink("Salvar", "AlterarTarefa",
+                                          new { id = t.Codigo },
+                                          new { @class = "btn btn-danger btn-sm" })
+                                        </span>*@
 
-                @ViewBag.Mensagem
-             }
-        </div>
-            <div class="col-md-9">
+                                    @*integração com código javascript*@
+                                    @*<button class="btn btn-success btnAlterar">Alterar</button>
 
-                @if (Model != null && Model.ListagemTarefas != null)
-                {
-                    if (Model.ListagemTarefas.Count > 0)
-                    {
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Tarefa</th>
-                                    <th>Categoria</th>
-                                    <th>Criado por</th>
-                                    <th>Descrição</th>
-                                    <th>Inicio</th>
-                                    <th>Termino</th>
-                                    <th>Operações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                                        <button class="btn btn-primary btnSalvarAlteracao" style="display: none" data-id="@t.Codigo">
+                                            Salvar
+                                        </button>*@
 
-                                @foreach (var t in Model.ListagemTarefas)
-                                {
-                                    <tr>
-                                        <td>@t.Titulo</td>
-                                        <td>@t.Categoria</td>
-                                        <th>@t.Descricao</th>
-                                        <th>@t.DataHoraInicio</th>
-                                        <td>@t.DataHoraFim</td>
-                                        <td>
-                                            @Html.ActionLink("Excluir", "ExcluirTarefa",
-                                           new { id = t.Codigo },
-                                           new { @class = "btn btn-danger btn-sm" })
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="7">
-                                        Quantidade: @Model.ListagemTarefas.Count
-                                    </td>
+                                    @Html.ActionLink("Alterar", "Editar", new { id = t.Codigo }, new { @class = "btn btn-success btn-sm" })
 
-                                </tr>
-                            </tfoot>
-                        </table>
+                                    @Html.ActionLink("Excluir", "ExcluirTarefa", new { id = t.Codigo },
+                                        new { @class = "btn btn-danger btn-sm", onclick = "return confirm('Deseja excluir?');" })
 
+
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                Quantidade: @Model.ListagemTarefas.Count
+                            </td>
+
+                        </tr>
+                    </tfoot>
+                </table>
+
+            }
+            else
+            {
+                <h4>Nenhuma tarefa encontrada</h4>
+            }
+        }
+
+    </div>
+
+
+    @*´código javascript*@
+    @*<script>
+            // Selecionamos todos os botões (querySelectorAll) pois há vários na tabela
+            document.querySelectorAll(".btnAlterar").forEach(btn => {
+                btn.addEventListener("click", (e) => {
+                    const linha = e.target.closest("tr");
+                    const descricaoTd = linha.querySelector(".descricao");
+                    const btnSalvar = linha.querySelector(".btnSalvarAlteracao");
+
+                    e.target.style.display = "none";
+                    descricaoTd.contentEditable = true;
+                    descricaoTd.style.backgroundColor = "#ffffd0"; // Destaque visual
+                    descricaoTd.focus();
+                    btnSalvar.style.display = "inline-block";
+                });
+            });
+
+            document.querySelectorAll(".btnSalvarAlteracao").forEach(btn => {
+                btn.addEventListener("click", async (e) => {
+                    const botao = e.target;
+                    const linha = botao.closest("tr");
+                    const descricaoTd = linha.querySelector(".descricao");
+                    const idTarefa = botao.getAttribute("data-id");
+                    const novaDescricao = descricaoTd.innerText;
+
+                    // Enviando para o Controller via Fetch
+                    try {
+                        const response = await fetch(`/Agenda/AlterarTarefa`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: `id=${idTarefa}&descricao=${encodeURIComponent(novaDescricao)}`
+                        });
+
+                        if (response.ok) {
+                            alert("Tarefa atualizada!");
+                            // Volta ao estado normal
+                            descricaoTd.contentEditable = false;
+                            descricaoTd.style.backgroundColor = "transparent";
+                            botao.style.display = "none";
+                            linha.querySelector(".btnAlterar").style.display = "inline-block";
+                        } else {
+                            alert("Erro ao salvar alteração.");
+                        }
+                    } catch (error) {
+                        console.error("Erro:", error);
                     }
-                    else
-                    {
-                        <h4>Nenhuma tarefa encontrada</h4>
-                    }
-                }
+                });
+            });
+        </script>*@
+    @*<script>
+            const btnAlterar = document.querySelector(".btnAlterar");
+            const btnSalvarAlteracao = document.querySelector(".btnSalvarAlteracao");
+            const descricao = document.querySelector(".descricao");
+            descricao.contentEditable = false;
 
-        </div>
+            btnAlterar.addEventListener("click", (e) => {
+
+                e.target.style.display = "none";
+
+                descricao.contentEditable = true;
+                btnSalvarAlteracao.style.display = "block";
+
+            })
+
+            btnSalvarAlteracao.addEventListener("click", (e) => {
+
+                e.target.style.display = "none";
+
+                descricao.contentEditable = false;
+                btnAlterar.style.display = "block";
+
+
+            })
+
+        </script>*@
 </div>

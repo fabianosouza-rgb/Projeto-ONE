@@ -197,6 +197,7 @@
     <Content Include="Views\Agenda\Cadastro.cshtml" />
     <Content Include="Views\Agenda\Consulta.cshtml" />
     <Content Include="Views\Categoria\CategoriaCadastro.cshtml" />
+    <Content Include="Views\Agenda\Editar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
